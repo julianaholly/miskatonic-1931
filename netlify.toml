@@ -1,0 +1,9 @@
+# Netlify: build the stand-alone site into dist/ and serve it.
+[build]
+  command = "node tools/build-site.mjs && node tools/validate-story.mjs"
+  publish = "dist"
+
+[[headers]]
+  for = "/audio/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

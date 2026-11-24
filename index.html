@@ -1,0 +1,151 @@
+<meta charset="utf-8">
+<title>Miskatonic 1931</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Transmissions from the Mountains of Madness. A real-time radio story.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Jost:wght@300;400&amp;display=swap">
+<link rel="stylesheet" href="styles/app.css">
+
+<div id="app">
+  <svg class="frame" id="frame" aria-hidden="true"></svg>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- TITLE -->
+  <section class="screen" id="title" aria-label="Title">
+    <div class="t-top"><span>BASE CAMP<br>McMURDO SOUND</span><span>RX · 7.4 MC<br>SIGNAL 12%</span></div>
+    <div class="ridges" aria-hidden="true">
+      <svg class="far" viewBox="0 0 780 130"><path d="M0 110 L60 100 L104 108 L160 86 L220 106 L270 94 L330 108 L390 110 L450 100 L494 108 L550 86 L610 106 L660 94 L720 108 L780 110" fill="none" stroke="#1E1C1A"/></svg>
+      <i class="ridge-head" id="ridgeHead"></i>
+      <svg class="near" viewBox="0 0 780 130"><path d="M0 70 L40 58 L70 66 L112 30 L150 58 L186 40 L214 56 L256 16 L300 50 L338 36 L390 70 L430 58 L460 66 L502 30 L540 58 L576 40 L604 56 L646 16 L690 50 L728 36 L780 70" fill="none" stroke="#2E2C29"/></svg>
+    </div>
+    <div class="t-centre">
+      <div class="t-block">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="incoming" aria-label="Incoming"><i class="dot"></i><span class="word" id="incoming"></span></div>
+        <div class="logo" role="img" aria-label="Miskatonic">
+          <div class="glow" aria-hidden="true"><b>M</b><i>ISKATONIC</i></div>
+          <h1 aria-hidden="true"><span class="m">M</span>ISK<span class="a">A</span>TONIC</h1>
+          <i class="haze"></i><i class="beam"></i><i class="core"></i>
+        </div>
+        <span class="year">1931</span>
+        <p class="subtitle">Transmissions from the<br>Mountains of Madness</p>
+        <button class="tap-sound" id="tapSound">♪ TAP FOR SOUND</button>
+      </div>
+    </div>
+    <div class="t-actions">
+      <button class="btn primary" id="start"><span id="startLabel">ANSWER THE SIGNAL</span><span class="chev" aria-hidden="true">›</span></button>
+      <button class="btn quiet center" id="newgame" hidden>START A NEW TRANSMISSION</button>
+      <button class="btn quiet" id="toSettings"><span>SETTINGS</span><span class="chev" aria-hidden="true">›</span></button>
+    </div>
+    <div class="readouts"><span>M·1931<br>v0.1</span><span>A STORY IN<br>REAL TIME</span><span id="titleClock">23 01 31<br>13:58:00</span></div>
+  </section>
+
+  <!-- INTRO (first play only) -->
+  <section class="screen" id="intro" aria-label="Before you begin" hidden>
+    <div class="i-centre">
+      <div class="i-panel">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <span class="label">BEFORE YOU ANSWER</span>
+        <p><span class="hl">Miskatonic 1931</span> is a story told in real time, over the course of an evening and beyond.</p>
+        <p>When Dyer is busy, you wait. When his signal returns, he will call for you. Keep this tab open, or turn on notifications.</p>
+        <p>Every choice is yours. Some cannot be taken back.</p>
+        <p class="small">You can change notifications at any time in Settings.</p>
+      </div>
+    </div>
+    <div class="t-actions">
+      <button class="btn quiet center" id="iNotify">TURN ON NOTIFICATIONS</button>
+      <button class="btn primary" id="iGo"><span>UNDERSTOOD</span><span class="chev" aria-hidden="true">›</span></button>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="screen" id="game" aria-label="Transmission" hidden>
+    <div class="g-head">
+      <div class="mmark" role="img" aria-label="Miskatonic 1931"><span class="g" aria-hidden="true">M</span><span class="f" aria-hidden="true">M</span><i></i><i></i><i></i></div>
+      <div class="tx"><span class="label">TRANSMISSION</span><b id="txNo">001</b>
+        <button class="menu" id="gameMenu" aria-label="Settings">
+          <svg width="15" height="10" viewBox="0 0 18 12" aria-hidden="true"><path d="M0 1H18M4 6H18M0 11H18" stroke="#8F8A82" stroke-width="1.4"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="g-body">
+      <div class="rail" aria-hidden="true"><span class="ch" id="railCh">CH<br>01</span><div class="track"><i class="pip" id="pip"></i></div></div>
+      <div class="log" id="log" role="log" aria-live="polite" tabindex="0"></div>
+    </div>
+    <div id="bottom"></div>
+    <div class="readouts"><span>M·1931<br>v0.1</span><span id="sigOut">SIGNAL 88%<br>7.4 MC</span><span id="clockOut">23 01 31<br>13:58</span></div>
+  </section>
+
+  <!-- CHAPTER CARD -->
+  <section class="screen" id="chapter" aria-label="Chapter" hidden>
+    <div class="c-top"><span class="label">CHAPTER</span><b id="cNo">01 <span>/ 06</span></b></div>
+    <div class="c-star" aria-hidden="true">
+      <svg viewBox="0 0 390 340">
+        <defs><radialGradient id="starhalo"><stop offset="0" stop-color="#FFF4DC" stop-opacity="0.9"/><stop offset="0.18" stop-color="#E2B567" stop-opacity="0.45"/><stop offset="0.5" stop-color="#B8863B" stop-opacity="0.12"/><stop offset="1" stop-color="#B8863B" stop-opacity="0"/></radialGradient></defs>
+        <g fill="none" stroke="#2A2825">
+          <circle cx="195" cy="170" r="150"/><circle cx="195" cy="170" r="104" stroke-dasharray="1 6" stroke="#3B3833"/><circle cx="195" cy="170" r="58"/>
+          <path d="M195 0 V340 M25 170 H365 M88 63 L302 277 M302 63 L88 277" stroke-width="0.6"/>
+        </g>
+        <g class="star-drift">
+          <circle class="star-pulse" cx="195" cy="170" r="64" fill="url(#starhalo)"/>
+          <path d="M195 134 L197 168 L231 170 L197 172 L195 206 L193 172 L159 170 L193 168 Z" fill="#E2B567" opacity="0.35" style="filter: blur(2px)"/>
+          <path class="star-pulse" d="M195 150 L198.5 166.5 L215 170 L198.5 173.5 L195 190 L191.5 173.5 L175 170 L191.5 166.5 Z" fill="#FFF1D2" style="filter: drop-shadow(0 0 3px rgba(255,240,210,0.9)) drop-shadow(0 0 10px rgba(212,160,74,0.8)) drop-shadow(0 0 24px rgba(184,134,59,0.55))"/>
+          <circle cx="195" cy="170" r="2.2" fill="#FFFFFF"/>
+        </g>
+      </svg>
+    </div>
+    <div class="c-title"><h2 id="cTitle">Static</h2><span class="label">SIGNAL REACQUIRED</span></div>
+    <div class="c-narr"><div><span class="label">FROM DYER'S LATER ACCOUNT</span><p id="cNarr"></p></div></div>
+    <button class="btn c-go" id="cGo"><span>CONTINUE</span><span class="chev" aria-hidden="true" style="color: var(--gold-hi)">›</span></button>
+  </section>
+
+  <!-- ENDING -->
+  <section class="screen" id="ending" aria-label="Ending" hidden>
+    <div class="e-top"><span class="label" id="eStatus">SIGNAL LOST</span></div>
+    <div class="e-ecg" id="eEcg" aria-hidden="true"></div>
+    <div class="e-title"><span class="label">ENDING</span><h2 id="eTitle"></h2></div>
+    <div class="e-epi"><div><p id="eEpi"></p><p class="echo" id="eEcho" hidden></p></div></div>
+    <div style="flex: 1"></div>
+    <div class="e-actions">
+      <button class="btn primary" id="eRewind"><span>↺ REWIND TO CHECKPOINT</span><span class="chev" id="eCp">CH 01</span></button>
+      <button class="btn quiet center" id="eTitleBtn">RETURN TO TITLE</button>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="screen" id="settings" aria-label="Settings" hidden>
+    <div class="s-head"><h2>SETTINGS</h2>
+      <button class="close" id="sClose" aria-label="Close settings"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1 L13 13 M13 1 L1 13" stroke="#B9B3A9" stroke-width="1.2"/></svg></button>
+    </div>
+    <div class="s-list">
+      <span class="label s-sec">PACING</span>
+      <div class="s-row"><div class="txt"><b id="lblFast">Fast mode</b><small>Waits take 5 seconds (testing, this visit only)</small></div><button class="switch" role="switch" id="setFast" aria-labelledby="lblFast"></button></div>
+      <div class="s-row"><div class="txt"><b id="lblNotify">Notifications</b><small id="notifyNote">Tell me when the signal returns</small></div><button class="switch" role="switch" id="setNotify" aria-labelledby="lblNotify"></button></div>
+      <span class="label s-sec">SIGNAL</span>
+      <div class="s-row"><div class="txt"><b id="lblSound">Sound</b><small>Static, tones and interference</small></div><button class="switch" role="switch" id="setSound" aria-labelledby="lblSound"></button></div>
+      <div class="s-row"><div class="txt"><b id="lblMusic">Music</b><small>Ambient score, on a loop</small></div><button class="switch" role="switch" id="setMusic" aria-labelledby="lblMusic"></button></div>
+      <div class="s-row"><div class="txt"><b>Music volume</b></div>
+        <div class="seg" role="radiogroup" aria-label="Music volume" id="setVol"><button role="radio" data-v="low">LOW</button><button role="radio" data-v="medium">MED</button><button role="radio" data-v="high">HIGH</button></div></div>
+      <div class="s-row"><div class="txt"><b>Distortion</b><small>Dyer's text trembles as his mind slips</small></div>
+        <div class="seg" role="radiogroup" aria-label="Distortion" id="setDist"><button role="radio" data-v="full">FULL</button><button role="radio" data-v="calm">CALM</button></div></div>
+      <div class="s-row"><div class="txt"><b>Text size</b><small>Transmission log</small></div>
+        <div class="seg" role="radiogroup" aria-label="Text size" id="setText"><button role="radio" data-v="s">S</button><button role="radio" data-v="m">M</button><button role="radio" data-v="l">L</button></div></div>
+      <span class="label s-sec">RECORD</span>
+      <button class="s-row btnrow" id="toEndings"><span class="txt"><b>Endings found</b><small>See the ones you've reached</small></span><span class="big" id="sEndings">0 <span>/ 9</span></span></button>
+      <button class="s-row btnrow" id="sErase"><span>Erase the record</span><span class="go" id="sEraseGo">RESTART ›</span></button>
+    </div>
+    <div class="readouts"><span>M·1931<br>v0.1</span><span>MUSIC: RUSKERDAX,<br>SRG774 · CC0</span><span>AFTER H. P. LOVECRAFT<br>AT THE MOUNTAINS OF MADNESS</span></div>
+  </section>
+
+  <!-- ENDINGS LIST -->
+  <section class="screen" id="endings" aria-label="Endings" hidden>
+    <div class="s-head"><h2>ENDINGS</h2>
+      <button class="close" id="enClose" aria-label="Close endings"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1 L13 13 M13 1 L1 13" stroke="#B9B3A9" stroke-width="1.2"/></svg></button>
+    </div>
+    <div class="s-list" id="enList"></div>
+    <div class="readouts"><span>M·1931<br>v0.1</span><span></span><span id="enCount">0 OF 6 FOUND</span></div>
+  </section>
+</div>
+
+<script type="module" src="src/main.js"></script>
