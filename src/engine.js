@@ -116,6 +116,7 @@ export class Engine {
     const s = this.state;
     s.node = cp.node; s.vars = { ...cp.vars }; s.log = s.log.slice(0, cp.logLen);
     s.clock = cp.clock; s.transmission = cp.transmission; s.step = 0; s.phase = 'enter';
+    if (cp.ch) s.chapterN = cp.ch;
     s.ending = null; s.waitUntil = 0; s.endMarked = false; s.unread = 0; s.readUntil = 0; s.holdTarget = null;
     this.persist();
     this.ui.rebuild(s);
@@ -153,9 +154,12 @@ export class Engine {
       return this.holdChapter(run);
     }
     s.node = id; s.step = 0;
-    if (n.checkpoint) {
+    if (n.chapter) s.chapterN = n.chapter.n;
+    // Checkpoints at every chapter start and every decision, so a rewind only goes back
+    // to the last choice that could still have saved Dyer, never all the way to the start.
+    if (n.checkpoint || n.choices) {
       // snapshot before this node's effects, so a rewind re-applies them exactly once
-      s.checkpoint = { node: id, vars: { ...s.vars }, logLen: s.log.length, clock: s.clock, transmission: s.transmission };
+      s.checkpoint = { node: id, vars: { ...s.vars }, logLen: s.log.length, clock: s.clock, transmission: s.transmission, ch: s.chapterN || 1 };
       s.checkpoints = (s.checkpoints || []).filter((c) => c.node !== id).concat([s.checkpoint]);
     }
     if (applyEffects || s.phase === 'enter') applySet(s.vars, n.set);
@@ -210,7 +214,8 @@ export class Engine {
     if (n.ending) { s.phase = 'hold-end'; s.endMarked = false; this.persist(); return this.holdEnd(run, false); }
     if (n.wait) {
       const fast = this.settings.get('fast');
-      const ms = fast ? 3000 : Math.max(6000, Math.min(20000, 4000 + (s.unread || 0) * 60));
+      // The wait bar sits below the text and no longer covers it, so it follows Dyer's last line after a short beat.
+      const ms = fast ? 800 : 1200;
       s.phase = 'reading'; s.readUntil = Date.now() + ms; this.persist();
       return this.readThenWait(run);
     }
@@ -225,7 +230,7 @@ export class Engine {
   // A reading pause sized to what Dyer just said; then the real-time wait starts by itself.
   async readThenWait(run) {
     const s = this.state;
-    if (!s.readUntil) s.readUntil = Date.now() + 6000;
+    if (!s.readUntil) s.readUntil = Date.now() + 1200;
     this.ui.reading(true);
     await delay(Math.max(0, s.readUntil - Date.now()));
     this.ui.reading(false);

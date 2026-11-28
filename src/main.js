@@ -334,6 +334,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) docu
 // ── header, rail and readouts ──────────────────────────────────────
 const SIGNAL = [88, 74, 66, 58, 47, 36, 24, 52, 71];
 function chapterOf(state) {
+  if (state.chapterN) return state.chapterN;
   const n = NODES[state.checkpoint ? state.checkpoint.node : state.node];
   return (n && n.chapter && n.chapter.n) || 1;
 }
@@ -402,8 +403,8 @@ function showEnding(id, state) {
     ? `<svg viewBox="0 0 330 80" preserveAspectRatio="none"><defs><clipPath id="ecgClip"><rect id="ecgReveal" x="0" y="0" width="0" height="80"/></clipPath></defs><path clip-path="url(#ecgClip)" d="${MONITOR_D}" fill="none" stroke="#7FE0D0" stroke-width="1" style="filter: drop-shadow(0 0 3px rgba(127,224,208,0.6))"/><path d="M0 62 H330" stroke="#24403C" stroke-dasharray="2 4"/></svg><i class="ecg-tip" id="ecgTip"></i>`
     : `<svg viewBox="0 0 330 80" preserveAspectRatio="none" style="-webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)"><g class="beatscroll"><path d="M0 40 H30 L34 26 L38 54 L42 32 L46 44 L50 40 H110 L114 26 L118 54 L122 32 L126 44 L130 40 H190 L194 26 L198 54 L202 32 L206 44 L210 40 H270 L274 26 L278 54 L282 32 L286 44 L290 40 H350 L354 26 L358 54 L362 32 L366 44 L370 40 H430 L434 26 L438 54 L442 32 L446 44 L450 40 H500" fill="none" stroke="#D4A04A" stroke-width="1" style="filter: drop-shadow(0 0 3px rgba(212,160,74,0.6))"/></g><path d="M0 62 H330" stroke="#3B3833" stroke-dasharray="2 4"/></svg>`;
   const target = engine.rewindTarget().cp;
-  const cp = target && NODES[target.node].chapter;
-  $('eCp').textContent = cp ? `CH ${pad(cp.n)}` : '';
+  const cpN = target && (target.ch || (NODES[target.node].chapter || {}).n);
+  $('eCp').textContent = cpN ? `CH ${pad(cpN)}` : '';
   show('ending');
   if (death) runMonitor(); else { sfx.signal(); music.sting('victory'); }
   applySettings();
